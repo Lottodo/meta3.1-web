@@ -19,6 +19,13 @@ app.use((req, res, next) => {
   next();
 });
 
+//Middleware para recibir tipo de respuesta (json o text)
+app.use((req, res, next) => {
+  const format = String(req.query.format || 'json').toLowerCase();
+  res.locals.format = format === 'text' ? 'text' : 'json';
+  next();
+});
+
 // Rutas
 app.use('/api/tareas', tareaRoutes);
 
