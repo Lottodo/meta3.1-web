@@ -4,6 +4,7 @@
 
 const express = require('express');
 const tareaRoutes = require('./routes/tarea.routes');
+const { fail } = require('./utils/response.util')
 
 const app = express();
 
@@ -48,20 +49,13 @@ app.get('/', (req, res) => {
 
 // Middleware para manejar rutas no encontradas
 app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: 'Ruta no encontrada'
-  });
+  return fail(res, 'Ruta no encontrada', 404);
 });
 
 // Middleware de manejo de errores
 app.use((err, req, res, next) => {
   console.error('Error no controlado:', err);
-  res.status(500).json({
-    success: false,
-    message: 'Error interno del servidor',
-    error: err.message
-  });
+  return fail(res, 'Error interno del servidor', 500, { error: err.message });
 });
 
 module.exports = app;

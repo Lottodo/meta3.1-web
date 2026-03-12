@@ -4,22 +4,15 @@
  */
 
 const tareaModel = require('../models/tarea.model');
+const { ok, fail } = require('../utils/response.util')
 
 // GET /api/tareas - Obtener todas las tareas
 const obtenerTodas = (req, res) => {
   try {
     const tareas = tareaModel.obtenerTodas();
-    res.json({
-      success: true,
-      data: tareas,
-      count: tareas.length
-    });
+    return ok(res, tareas, 200, { count: tareas.length });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener las tareas',
-      error: error.message
-    });
+    return fail(res, 'Error al obtener las tareas', 500, { error: error.message });
   }
 };
 
@@ -29,31 +22,18 @@ const obtenerPorId = (req, res) => {
     const id = parseInt(req.params.id);
     
     if (isNaN(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID inválido. Debe ser un número'
-      });
+      return fail(res, 'ID inválido. Debe ser un número', 400);
     }
     
     const tarea = tareaModel.obtenerPorId(id);
     
     if (!tarea) {
-      return res.status(404).json({
-        success: false,
-        message: `Tarea con ID ${id} no encontrada`
-      });
+      return fail(res, `Tarea con ID ${id} no encontrada`, 404);
     }
     
-    res.json({
-      success: true,
-      data: tarea
-    });
+    return ok(res, tarea);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al obtener la tarea', 500, { error: error.message });
   }
 };
 
@@ -64,25 +44,14 @@ const crear = (req, res) => {
     
     // Validar datos requeridos
     if (!titulo) {
-      return res.status(400).json({
-        success: false,
-        message: 'El campo "titulo" es requerido'
-      });
+      return fail(res, 'El campo "titulo" es requerido', 400);
     }
     
     const nuevaTarea = tareaModel.crear({ titulo, completada });
     
-    res.status(201).json({
-      success: true,
-      message: 'Tarea creada exitosamente',
-      data: nuevaTarea
-    });
+    return ok(res, nuevaTarea, 201, { message: 'Tarea creada exitosamente' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al crear la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al crear la tarea', 500, { error: error.message });
   }
 };
 
@@ -93,40 +62,23 @@ const actualizarCompleta = (req, res) => {
     const { titulo, completada } = req.body;
     
     if (isNaN(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID inválido. Debe ser un número'
-      });
+      return fail(res, 'ID inválido. Debe ser un número', 400);
     }
     
     // Validar datos requeridos
     if (!titulo) {
-      return res.status(400).json({
-        success: false,
-        message: 'El campo "titulo" es requerido'
-      });
+      return fail(res, 'El campo "titulo" es requerido', 400);
     }
     
     const tareaActualizada = tareaModel.actualizarCompleta(id, { titulo, completada });
     
     if (!tareaActualizada) {
-      return res.status(404).json({
-        success: false,
-        message: `Tarea con ID ${id} no encontrada`
-      });
+      return fail(res, `Tarea con ID ${id} no encontrada`, 404);
     }
-    
-    res.json({
-      success: true,
-      message: 'Tarea actualizada completamente',
-      data: tareaActualizada
-    });
+
+    return ok(res, tareaActualizada, 200, { message: 'Tarea actualizada completamente' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al actualizar la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al actualizar la tarea', 500, { error: error.message });
   }
 };
 
@@ -137,40 +89,23 @@ const actualizarParcial = (req, res) => {
     const datosParciales = req.body;
     
     if (isNaN(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID inválido. Debe ser un número'
-      });
+      return fail(res, 'ID inválido. Debe ser un número', 400);
     }
     
     // Si no hay datos para actualizar
     if (Object.keys(datosParciales).length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: 'Debe enviar al menos un campo para actualizar'
-      });
+      return fail(res, 'Debe enviar al menos un campo para actualizar', 400);
     }
     
     const tareaActualizada = tareaModel.actualizarParcial(id, datosParciales);
     
     if (!tareaActualizada) {
-      return res.status(404).json({
-        success: false,
-        message: `Tarea con ID ${id} no encontrada`
-      });
+      return fail(res, `Tarea con ID ${id} no encontrada`, 404);
     }
-    
-    res.json({
-      success: true,
-      message: 'Tarea actualizada parcialmente',
-      data: tareaActualizada
-    });
+
+    return ok(res, tareaActualizada, 200, { message: 'Tarea actualizada parcialmente' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al actualizar la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al actualizar la tarea', 500, { error: error.message });
   }
 };
 
@@ -180,32 +115,18 @@ const eliminar = (req, res) => {
     const id = parseInt(req.params.id);
     
     if (isNaN(id)) {
-      return res.status(400).json({
-        success: false,
-        message: 'ID inválido. Debe ser un número'
-      });
+      return fail(res, 'ID inválido. Debe ser un número', 400);
     }
     
     const tareaEliminada = tareaModel.eliminar(id);
     
     if (!tareaEliminada) {
-      return res.status(404).json({
-        success: false,
-        message: `Tarea con ID ${id} no encontrada`
-      });
+      return fail(res, `Tarea con ID ${id} no encontrada`, 404);
     }
-    
-    res.json({
-      success: true,
-      message: 'Tarea eliminada exitosamente',
-      data: tareaEliminada
-    });
+
+    return ok(res, tareaEliminada, 200, { message: 'Tarea eliminada exitosamente' });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al eliminar la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al eliminar la tarea', 500, { error: error.message });
   }
 };
 
@@ -217,22 +138,12 @@ const obtenerPorTitulo = (req, res) => {
     const tarea = tareaModel.obtenerPorTitulo(query);
     
     if (!tarea) {
-      return res.status(404).json({
-        success: false,
-        message: `Tarea con título que incluya ${query} no encontrada`
-      });
+      return fail(res, `Tarea con título que incluya ${query} no encontrada`, 404);
     }
-    
-    res.json({
-      success: true,
-      data: tarea
-    });
+
+    return ok(res, tarea);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener la tarea',
-      error: error.message
-    });
+    return fail(res, 'Error al obtener la tarea', 500, { error: error.message });
   }
 };
 
