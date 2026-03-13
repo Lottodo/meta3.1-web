@@ -170,7 +170,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://localhost:3000/api/tareas/buscar?q=waos",
+          "raw": "http://localhost:3000/api/tareas/buscar?q=express",
           "protocol": "http",
           "host": [
             "localhost"
@@ -184,11 +184,38 @@
           "query": [
             {
               "key": "q",
-              "value": "waos",
-              "type": "text"
+              "value": "express"
             }
           ]
         }
+      },
+      "response": []
+    },
+    {
+      "name": "Recurso no encontrado",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/pendientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pendientes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Datos inválidos",
+      "request": {
+        "method": "GET",
+        "header": []
       },
       "response": []
     }

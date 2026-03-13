@@ -43,3 +43,17 @@ El servidor estará disponible en: **http://localhost:3000**
 - `PUT /api/tareas/:id` - Actualizar una tarea (completa)
 - `PATCH /api/tareas/:id` - Actualizar una tarea (parcial)
 - `DELETE /api/tareas/:id` - Eliminar una tarea
+
+## Pruebas en Postman - Capturas de Pantalla
+
+| Escenario | Código | Esperado | Captura |
+|-----------|--------|----------|---------|
+| GET exitoso | `GET /api/tareas` | 200 OK | ![GET exitoso](fotos_postman/get.png) |
+| GET por ID | `GET /api/tareas/:id` | 200 OK | ![GET por ID](fotos_postman/get_id.png) |
+| POST exitoso | `POST /api/tareas` | 201 Created | ![POST exitoso](fotos_postman/post.png) |
+| PUT exitoso | `PUT /api/tareas/:id` | 200 OK | ![PUT exitoso](fotos_postman/put.png) |
+| PATCH exitoso | `PATCH /api/tareas/:id` | 200 OK | ![PATCH exitoso](fotos_postman/patch.png) |
+| DELETE exitoso | `DELETE /api/tareas/:id` | 200 OK | ![DELETE exitoso](fotos_postman/del.png) |
+| Recurso no encontrado | `GET /api/tareas/999` | 404 Not Found | ![404 Not Found](fotos_postman/not_found.png) |
+| Datos inválidos | `POST /api/tareas` (sin titulo) | 400 Bad Request | ![400 Bad Request](fotos_postman/bad_request.png) |
+| Error de servidor | Excepción no controlada | 500 Internal Server Error | ![500 Internal Server Error](fotos_postman/server_error.png) |
